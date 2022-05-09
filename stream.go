@@ -184,7 +184,9 @@ func (s *Stream) Read(max int) (events []Event, err error) {
 			Data2:     (int64(buffer[i].message) >> 16) & 0xFF,
 		}
 
-		if event.Status&0xF0 == 0xF0 {
+		if 0xF8 <= event.Status && event.Status <= 0xFF {
+			// System Real Time Messages
+		} else if event.Status&0xF0 == 0xF0 {
 			// Sysex message starts with 0xF0, ends with 0xF7
 			read := 0
 			for i+read < numEvents {
